@@ -140,13 +140,17 @@ class _HomeState extends State<Home> {
                             onTap: (){
                               Navigator.push(context, MaterialPageRoute(builder: (context){return DetailedTable(data: data);}),);
                             },
-                            child: Text(
-                            "See Details",
-                            style: TextStyle(
-                              color : kPrimaryColor,
-                              fontWeight: FontWeight.w600
-                            ),
+                            child: Container(
+                              padding: EdgeInsets.all(8),
+                              decoration: BoxDecoration(color: Colors.brown),
+                              child: Text(
+                              "See Details",
+                              style: TextStyle(
+                                color : kPrimaryColor,
+                                fontWeight: FontWeight.w600
+                              ),
                           ),
+                            ),
                         )
                       ],
                     ),

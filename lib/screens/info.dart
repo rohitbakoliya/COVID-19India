@@ -115,7 +115,7 @@ class _InfoState extends State<Info> {
                   customCard(
                     image: "assets/images/covid-prevent-hygiene.png",
                     title: "Practice respiratory hygiene",
-                    text: "Make sure you, & the people around you, follow good respiratory hygiene. This means covering your mouth & nose with your bent elbow or tissue when you cough or sneeze.",
+                    text: "Make sure you & the people around you, follow good respiratory hygiene. This means covering your mouth & nose with tissue when you cough or sneeze.",
                   ),
                   SizedBox(height: 50),
                 ]
@@ -132,12 +132,12 @@ class _InfoState extends State<Info> {
     return Padding(
       padding: const EdgeInsets.only(bottom : 10.0),
         child: SizedBox(
-          height: 176,
+          height: 216,
           child: Stack(
             alignment: Alignment.centerLeft,
             children: <Widget>[
               Container(
-                height: 156,
+                height: 196,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
@@ -163,27 +163,27 @@ class _InfoState extends State<Info> {
                 left: 130,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal:20, vertical: 15),
-                  height: 170,
+                  height: 210,
                   width: MediaQuery.of(context).size.width - 170,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
                         title, 
-                        style: kTitleTextstyle.copyWith(fontSize : 16),
+                        style: kTitleTextstyle.copyWith(fontSize : 14),
                       ),
-                      Expanded(
-                        child: 
+                      // Expanded(
+                      //   child: 
                         Text(
                           text,
-                          maxLines: 6,
+                          maxLines: 8,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 12,
                           ),
                         ),
-                      ),
+                      // ),
                     ],
                   ),
                 ),

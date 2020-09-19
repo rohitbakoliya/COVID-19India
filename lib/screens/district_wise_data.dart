@@ -37,7 +37,19 @@ class _DistrictWiseDataState extends State<DistrictWiseData> {
            Navigator.pop(context);
          },
         ),
-        backgroundColor: Color(0xFF11249F).withOpacity(0.80),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [
+                Color(0xFF3383CD),
+                Color(0xFF11249F)
+              ],
+            )
+          )
+        ),
+        // backgroundColor: Color(0xFF11249F).withOpacity(0.80),
         elevation: 0.0,
         actions: <Widget>[
           /*
@@ -49,9 +61,13 @@ class _DistrictWiseDataState extends State<DistrictWiseData> {
             builder: (context)=>Tooltip(
                   message: MaterialLocalizations.of(context).openAppDrawerTooltip,
                   child: Padding(
-                  padding: EdgeInsets.only(right: 17),
+                  padding: EdgeInsets.only(right: 5),
                   child: GestureDetector(
-                  child: SvgPicture.asset('assets/icons/menu.svg'),
+                  child: Container(
+                    // decoration: BoxDecoration(color: Colors.brown),
+                    padding: EdgeInsets.all(15),
+                    child: SvgPicture.asset('assets/icons/menu.svg')
+                  ),
                   onTap: (){
                     _scaffoldKey.currentState.openEndDrawer();
                   },
