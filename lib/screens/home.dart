@@ -69,6 +69,7 @@ class _HomeState extends State<Home> {
                 image: "assets/icons/Drcorona.svg",
                 textTop: "All you need",
                 textBottom: "is stay at home." ,
+                appBarHeight: MediaQuery.of(context).padding.top
                 // scaffoldContextKey: scaffoldKey,
               ),
               Container(

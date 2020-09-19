@@ -21,6 +21,7 @@ class _ProtectYourselfState extends State<ProtectYourself> {
                 image: 'assets/images/steps.png',
                 textBottom: '',
                 textTop: '',
+                appBarHeight: MediaQuery.of(context).padding.top,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),

@@ -7,16 +7,16 @@ class MyHeader extends StatelessWidget {
   final String image;
   final String textTop;
   final String textBottom;
+  final double appBarHeight;
   const MyHeader({
-    Key key, this.image, this.textTop, this.textBottom,
+    Key key, this.image, this.textTop, this.textBottom, this.appBarHeight,
   }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return ClipPath(
       clipper: MyClipper(),
       child: Container(
-        padding: EdgeInsets.only(left: 40, top: 30, right: 10),
+        padding: EdgeInsets.only(left: 40, top: this.appBarHeight + 5, right: 10),
         height: 350,
         width: double.infinity,
         decoration: BoxDecoration(

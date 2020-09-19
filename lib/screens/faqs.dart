@@ -22,6 +22,7 @@ class _FAQsState extends State<FAQs> {
                 image: 'assets/images/who.png',
                 textTop: '   FREQUENTLY',
                 textBottom: '        ASKED \n           QUESTIONS',
+                appBarHeight: MediaQuery.of(context).padding.top,
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),

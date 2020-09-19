@@ -41,6 +41,7 @@ class _InfoState extends State<Info> {
               image: "assets/icons/coronadr.svg",
               textTop: "Get to know",
               textBottom: "About COVID-19",
+              appBarHeight: MediaQuery.of(context).padding.top,
               // scaffoldContextKey: scaffoldKey,
             ),
             Padding(

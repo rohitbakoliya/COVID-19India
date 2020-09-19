@@ -21,7 +21,7 @@ class _IndiaHelplinesState extends State<IndiaHelplines> {
               ClipPath(
                 clipper: MyClipper(),
                 child: Container(
-                  padding: EdgeInsets.only(left: 40, top: 30, right: 10),
+                  padding: EdgeInsets.only(left: 40, top: MediaQuery.of(context).padding.top + 5, right: 10),
                   height: 350,
                   width: double.infinity,
                   decoration: BoxDecoration(
