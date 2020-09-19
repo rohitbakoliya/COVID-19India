@@ -22,7 +22,7 @@ class _DevelopersPageState extends State<DevelopersPage> {
               ClipPath(
                   clipper: MyClipper(),
                   child: Container(
-                  padding: EdgeInsets.only(left: 40, top: 50, right: 20),
+                  padding: EdgeInsets.only(left: 40, top: 30, right: 10),
                   height: 350,
                   width: double.infinity,
                   decoration: BoxDecoration(
@@ -45,7 +45,11 @@ class _DevelopersPageState extends State<DevelopersPage> {
                                 onTap: (){
                                   Scaffold.of(context).openEndDrawer();
                                 },
-                                child: SvgPicture.asset("assets/icons/menu.svg")
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(horizontal : 20, vertical: 10),
+                                  decoration: BoxDecoration(color: Colors.brown),
+                                  child: SvgPicture.asset("assets/icons/menu.svg")
+                                )
                               ),
                           ),
                       ),

@@ -420,6 +420,9 @@ class _HomeState extends State<Home> {
                       ) 
                     ),
                     SizedBox(height: 20),
+
+                    // spread trends
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -643,7 +646,7 @@ class _HomeState extends State<Home> {
       deaths =int.parse(data['statewise'][index]["deaths"]);
       recovered = int.parse(data['statewise'][index]["recovered"]);  
     });
-    print('last updated at : ' + lastUpdated);
+    // print('last updated at : ' + lastUpdated);
   }
 
   //Spread trends

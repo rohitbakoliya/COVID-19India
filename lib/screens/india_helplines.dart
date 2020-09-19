@@ -16,11 +16,12 @@ class _IndiaHelplinesState extends State<IndiaHelplines> {
       body: Builder(
         builder: (context)=>SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               ClipPath(
                 clipper: MyClipper(),
                 child: Container(
-                  padding: EdgeInsets.only(left: 40, top: 50, right: 20),
+                  padding: EdgeInsets.only(left: 40, top: 30, right: 10),
                   height: 350,
                   width: double.infinity,
                   decoration: BoxDecoration(
@@ -43,18 +44,24 @@ class _IndiaHelplinesState extends State<IndiaHelplines> {
                                 onTap: (){
                                   Scaffold.of(context).openEndDrawer();
                                 },
-                                child: SvgPicture.asset("assets/icons/menu.svg")
+                                child: Container(
+                                  decoration: BoxDecoration(color: Colors.brown),
+                                  padding: EdgeInsets.symmetric(horizontal : 20, vertical: 10),
+                                  child: SvgPicture.asset("assets/icons/menu.svg")
+                                )
                               ),
                           ),
                       ),
                       SizedBox(height: 20),
                       Text('#IndiaFightsCorona'  , style: TextStyle(color: Colors.white , fontSize: 18),),
                       Text('Lets Fight Together!!!' , style: TextStyle(color: Colors.white),),
-                      Image.asset(
-                        'assets/images/fight-corona.png',
-                        alignment: Alignment.bottomCenter,
-                        height: 230,
-                        fit: BoxFit.fitWidth,
+                      Expanded(
+                          child: Image.asset(
+                          'assets/images/fight-corona.png',
+                          alignment: Alignment.bottomCenter,
+                          height: 230,
+                          fit: BoxFit.fitWidth,
+                        ),
                       ),
                     ],
                   ),
