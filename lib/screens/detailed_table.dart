@@ -66,7 +66,10 @@ class _DetailedTableState extends State<DetailedTable> {
         ],
       ),
         body: SingleChildScrollView(
-          child: createTable(context , this.widget.data),
+          child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: CreateTable(data: this.widget.data['statewise'])
+            ),
           ),
     );
   }

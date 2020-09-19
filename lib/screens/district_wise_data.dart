@@ -13,16 +13,42 @@ class DistrictWiseData extends StatefulWidget {
 }
 
 class _DistrictWiseDataState extends State<DistrictWiseData> {
-  Map data = {};
-  Map districts = {};
+  
+  List<dynamic> disData = [];
   List<DataRow> rows = [];
   bool loading = true;
+  bool _sort;
+  int _columnIndex;
   @override
   void initState() {
+    _sort = true;
+    _columnIndex = 1;
     super.initState();
     getData();
   }
-
+onSortColumn(int columnIndex,bool ascending, String type){
+    if(ascending){
+      disData.sort((a, b){
+        if(type !="district")
+          return int.parse(a[type]).compareTo(int.parse(b[type]));
+        else
+          return a[type].compareTo(b[type]); 
+      });
+    }
+    else{
+      disData.sort((a, b){
+        
+        if(type !="district")
+          return int.parse(b[type]).compareTo(int.parse(a[type]));
+        else
+          return b[type].compareTo(a[type]); 
+      });    
+    }
+    setState(() {
+      rows = getRows();
+    });
+  
+  }
   @override
   Widget build(BuildContext context) {
     //Note: without providing type it is not working 
@@ -88,50 +114,88 @@ class _DistrictWiseDataState extends State<DistrictWiseData> {
                   style: TextStyle(color : kBodyTextColor.withOpacity(0.80)),
                 ),
               ),
-            ): DataTable(
-            columnSpacing: 0,
-            dataRowHeight: 60,
-            horizontalMargin: 20,
-            columns: [
-              DataColumn(
-                label: Text(
-                  'District',
-                style: TextStyle(
-                  color: kBodyTextColor,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: "Poppins"),
-              )),
-              DataColumn(
-                numeric: true,
+            ): 
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: DataTable(
+              sortAscending: _sort,
+              sortColumnIndex: _columnIndex,
+              dataRowHeight: 60,
+              // columnSpacing: 0,
+              // horizontalMargin: 20,
+              columns: [
+                DataColumn(
                   label: Text(
-                    'Infected',
-                    style: TextStyle(
-                        color: kInfectedColor,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: "Poppins"),
+                    'District',
+                  style: TextStyle(
+                    color: kBodyTextColor,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "Poppins"
+                    ),
                   ),
+                  onSort: (columnIndex, ascending){
+                    setState(() {
+                      _sort  = !_sort;
+                      _columnIndex = columnIndex;
+                    });
+                    onSortColumn(columnIndex, ascending, "district");
+                  },
                 ),
-              DataColumn(
-                numeric: true,
-                  label: Text(
-                'Recovered',
-                style: TextStyle(
-                    color: kRecovercolor,
-                    fontFamily: "Poppins",
-                    fontWeight: FontWeight.w600),
-              )),
-              DataColumn(
-                numeric: true,
-                  label: Text(
-                'Deaths',
-                style: TextStyle(
-                    color: kDeathColor,
-                    fontFamily: "Poppins",
-                    fontWeight: FontWeight.w600),
-              )),
-            ],
-            rows: rows,
+                DataColumn(
+                  numeric: true,
+                    label: Text(
+                      'Infected',
+                      style: TextStyle(
+                          color: kInfectedColor,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: "Poppins"),
+                    ),
+                    onSort: (columnIndex, ascending){
+                      setState(() {
+                        _sort  = !_sort;
+                        _columnIndex = columnIndex;
+                      });
+                      onSortColumn(columnIndex, ascending, "confirmed");
+                    },
+                  ),
+                DataColumn(
+                  numeric: true,
+                    label: Text(
+                  'Recovered',
+                  style: TextStyle(
+                      color: kRecovercolor,
+                      fontFamily: "Poppins",
+                      fontWeight: FontWeight.w600),
+                  ),
+                  onSort: (columnIndex, ascending){
+                    setState(() {
+                      _sort  = !_sort;
+                      _columnIndex = columnIndex;
+                    });
+                    onSortColumn(columnIndex, ascending, "recovered");
+                  },
+                ),
+                DataColumn(
+                  numeric: true,
+                    label: Text(
+                  'Deaths',
+                  style: TextStyle(
+                      color: kDeathColor,
+                      fontFamily: "Poppins",
+                      fontWeight: FontWeight.w600),
+                  ),
+                  onSort: (columnIndex, ascending){
+                    setState(() {
+                      _sort  = !_sort;
+                      _columnIndex = columnIndex;
+                    });
+                    onSortColumn(columnIndex, ascending, "deceased");
+                  },
+                ),
+              ],
+              rows: rows,
           ),
+            ),
         ),
     );
   }
@@ -140,17 +204,38 @@ class _DistrictWiseDataState extends State<DistrictWiseData> {
     try {
       Response response =
           await get('https://api.covid19india.org/state_district_wise.json');
-      data = jsonDecode(response.body);
-      districts = data[this.widget.state]['districtData'];
+      Map data = jsonDecode(response.body);
+      Map districts = data[this.widget.state]['districtData'];
       districts.forEach((key, value) {
-        rows.add(
+        Map<String, String> mp = {
+          'district': key,
+          'confirmed': "${value['confirmed']}",
+          'recovered' : "${value['recovered']}",
+          'deceased' : "${value['deceased']}"
+        };
+        disData.add(mp);
+      });
+      setState(() {
+        rows = getRows();
+      });
+      setState(() {
+        loading = false;
+      });
+    } catch (e) {
+      print('error is: ' + e.toString());
+    }
+  }
+  List<DataRow> getRows(){
+    List<DataRow> _rows = [];
+    disData.forEach((value) {
+      _rows.add(
           DataRow(
             cells: [
               DataCell(
                 Container(
                   width: MediaQuery.of(context).size.width/4.0,
                   child: Text(
-                    key,
+                    '${value['district']}',
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
@@ -190,12 +275,7 @@ class _DistrictWiseDataState extends State<DistrictWiseData> {
             ],
           )
         );
-      });
-      setState(() {
-        loading = false;
-      });
-    } catch (e) {
-      print('error is: ' + e.toString());
-    }
+    });
+    return _rows;
   }
 }
