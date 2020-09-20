@@ -5,6 +5,9 @@ import 'package:covid_19/widgets/dots.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:charts_flutter/src/text_style.dart' as style;
+import 'package:charts_flutter/src/text_element.dart' as textElement;
+
 import 'package:http/http.dart';
 import 'dart:convert';
 import 'package:covid_19/widgets/counter.dart';
@@ -12,9 +15,17 @@ import 'package:covid_19/widgets/myheader.dart';
 import 'package:covid_19/constant.dart';
 import 'package:covid_19/screens/detailed_table.dart';
 import 'package:covid_19/utils/utils.dart';
+import 'package:intl/intl.dart';
+
 
 class Home extends StatefulWidget {
-  
+  static String pointerInfectedLine;
+  static String pointerRecoveredLine;
+  static String pointerDeathsLine;
+  static String pointerInfectedBar;
+  static String pointerRecoveredBar;
+  static String pointerDeathsBar;
+  static String pointerValue;
   @override
   _HomeState createState() => _HomeState();
 }
@@ -29,14 +40,16 @@ class _HomeState extends State<Home> {
   String selected="India";
   int infected = -1;
   int deaths = -1;
+  int recovered = -1;
   double constant = 300;
   List<dynamic> list = [];
-  int recovered = -1;
   Map data = {};
   String lastUpdated="";
   bool infectedSwitchControl = false;
   bool recoveredSwitchControl = false;
   bool deathsSwitchControl = false;
+  
+
   @override
   void initState() {
     super.initState();
@@ -445,6 +458,9 @@ class _HomeState extends State<Home> {
                       ],
                     ),
                     SizedBox(height: 10),
+
+
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -655,7 +671,12 @@ class _HomeState extends State<Home> {
   }
 
   //Spread trends
-  charts.Series<TimeSeriesNums, DateTime> createSeries(String id, int i, String type){
+
+  /*
+    Flutter charts api reference : https://pub.dev/documentation/charts_common/latest/common/common-library.html
+  */
+  //-----charts handler
+  charts.Series<TimeSeriesNums, DateTime> createSeries(String id, List<TimeSeriesNums> list, String type){
     return charts.Series<TimeSeriesNums, DateTime>(
       id : id,
       colorFn: (_, index) => type=="totalconfirmed" || type =="dailyconfirmed" ? charts.MaterialPalette.deepOrange.shadeDefault 
@@ -665,38 +686,106 @@ class _HomeState extends State<Home> {
       // measureFn also there
       domainFn: (TimeSeriesNums sales, _) => sales.time,
       measureFn: (TimeSeriesNums sales, _) => sales.nums,
-      data: [
-        TimeSeriesNums(Utils().reformatDate(list[i]['date']), int.parse(list[i][type]))
-      ]
+      data: list
     );
   }
+
+  //-----for line charts
   Widget createChart(String type){
     List<charts.Series<TimeSeriesNums , DateTime >> seriesList = [];
+    List<TimeSeriesNums> seriesData = [];
     for(int i=0; i< min(list.length, 60); i++){
-      String id = 'ROHIT${i+1}';
-      seriesList.add(createSeries(id, i, type));
+      seriesData.add(TimeSeriesNums(Utils().reformatDate(list[i]['date']), int.parse(list[i][type])));
     }
+    seriesList.add(createSeries(type, seriesData, type));
     return charts.TimeSeriesChart(
       seriesList,
-      animate: true,
+      animate: false,
       primaryMeasureAxis: new charts.NumericAxisSpec(
-        tickProviderSpec: new charts.BasicNumericTickProviderSpec(desiredTickCount: 10)
+        tickProviderSpec: new charts.BasicNumericTickProviderSpec(desiredTickCount: 10),
+        tickFormatterSpec: new charts.BasicNumericTickFormatterSpec.fromNumberFormat(new NumberFormat.compact())
       ),
+      
+      domainAxis: new charts.DateTimeAxisSpec(
+        tickProviderSpec: new charts.DayTickProviderSpec(
+          increments: [12] // that is 12*5 = 60 days means 5 ticks are there 
+        ),
+        tickFormatterSpec: new charts.AutoDateTimeTickFormatterSpec(
+          day: new charts.TimeFormatterSpec(
+            format: 'dd MMM',
+            transitionFormat: 'dd MMM'
+          )
+        )
+      ),
+      
+      behaviors: [  
+        charts.LinePointHighlighter(symbolRenderer:  CustomCircleSymbolRenderer()),
+      //   charts.SlidingViewport(),
+      //   charts.PanAndZoomBehavior(),
+      ],
+      selectionModels: [
+        charts.SelectionModelConfig(changedListener: (charts.SelectionModel model) {
+        if (model.hasDatumSelection){
+          if(type == "totalconfirmed"){
+            Home.pointerInfectedLine = model.selectedSeries[0]
+            .measureFn(model.selectedDatum[0].index)
+            .toString();
+
+            Home.pointerRecoveredBar = null;
+            Home.pointerDeathsBar = Home.pointerDeathsLine = Home.pointerRecoveredBar = Home.pointerRecoveredLine = Home.pointerInfectedBar = null;
+          }else if(type == "totalrecovered"){
+            Home.pointerRecoveredLine = model.selectedSeries[0]
+            .measureFn(model.selectedDatum[0].index)
+            .toString();
+            
+            Home.pointerInfectedLine = null;
+            print('rec');
+            // Home.pointerValue = "totalrecovered";
+            // Home.pointerDeathsBar = Home.pointerDeathsLine = Home.pointerInfectedLine = Home.pointerRecoveredBar = Home.pointerInfectedBar = null;
+          }else{
+            Home.pointerDeathsLine = model.selectedSeries[0]
+            .measureFn(model.selectedDatum[0].index)
+            .toString();
+            // Home.pointerValue = "totaldeaths";
+            Home.pointerDeathsBar = Home.pointerInfectedLine = Home.pointerRecoveredBar = Home.pointerRecoveredLine = Home.pointerInfectedBar = null;
+          }
+          
+        }
+        })
+      ],
       defaultRenderer: new charts.LineRendererConfig(),
+      dateTimeFactory: const charts.LocalDateTimeFactory(),
     );
   }
+
+  //-----for bar charts
+  //refer this for label formating https://google.github.io/charts/flutter/example/axes/custom_axis_tick_formatters.html
   Widget createBarChart(String type){
     List<charts.Series<TimeSeriesNums , DateTime >> seriesList = [];
+    List<TimeSeriesNums> seriesData = [];
     for(int i=0; i< min(list.length, 60); i++){
-      String id = 'ROHIT${i+1}';
-      seriesList.add(createSeries(id, i, type));
+      seriesData.add(TimeSeriesNums(Utils().reformatDate(list[i]['date']), int.parse(list[i][type])));
     }
+    seriesList.add(createSeries(type, seriesData , type));
     return new charts.TimeSeriesChart(
       seriesList,
-      animate: true,
+      animate: false,
       primaryMeasureAxis: new charts.NumericAxisSpec(
-        tickProviderSpec: new charts.BasicNumericTickProviderSpec(desiredTickCount: 10)
+        tickProviderSpec: new charts.BasicNumericTickProviderSpec(desiredTickCount: 10),
+        tickFormatterSpec: new charts.BasicNumericTickFormatterSpec.fromNumberFormat(new NumberFormat.compact())
       ),
+      domainAxis: new charts.DateTimeAxisSpec(
+        tickProviderSpec: new charts.DayTickProviderSpec(
+          increments: [12] // that is 12*5 = 60 days means 5 ticks are there 
+        ),
+        tickFormatterSpec: new charts.AutoDateTimeTickFormatterSpec(
+          day: new charts.TimeFormatterSpec(
+            format: 'dd MMM',
+            transitionFormat: 'dd MMM'
+          )
+        )
+      ),
+      
       defaultRenderer: new charts.BarRendererConfig<DateTime>(),
       dateTimeFactory: const charts.LocalDateTimeFactory(),
     );
@@ -710,4 +799,37 @@ class TimeSeriesNums {
   TimeSeriesNums(this.time, this.nums);
 }
 
+class CustomCircleSymbolRenderer extends charts.CircleSymbolRenderer {
 
+  
+  @override
+  void paint(charts.ChartCanvas canvas, Rectangle<num> bounds,{List<int> dashPattern,charts.Color fillColor,charts.FillPatternType fillPattern, charts.Color strokeColor,double strokeWidthPx}) {
+    super.paint(canvas, bounds, dashPattern: dashPattern,fillColor: fillColor,fillPattern: fillPattern, strokeColor: strokeColor,strokeWidthPx: strokeWidthPx);
+    canvas.drawRect(
+    Rectangle(bounds.left - 5, bounds.top - 30, bounds.width + 10,
+    bounds.height + 10),
+    fill: charts.Color.white);
+    var textStyle = style.TextStyle();
+    textStyle.color = charts.Color.black;
+    textStyle.fontSize = 12;
+    
+    if(Home.pointerInfectedLine!=null){
+      canvas.drawText(
+      textElement.TextElement(NumberFormat.compact().format(int.parse(Home.pointerInfectedLine)), style: textStyle),
+      (bounds.left).round(),
+      (bounds.top - 28).round());
+    }
+    if(Home.pointerDeathsLine!=null){
+      canvas.drawText(
+      textElement.TextElement(NumberFormat.compact().format(int.parse(Home.pointerDeathsLine)), style: textStyle),
+      (bounds.left).round(),
+      (bounds.top - 28).round());
+    }
+    if(Home.pointerRecoveredLine!=null){
+      canvas.drawText(
+      textElement.TextElement(NumberFormat.compact().format(int.parse(Home.pointerRecoveredLine)), style: textStyle),
+      (bounds.left).round(),
+      (bounds.top - 28).round());
+    }
+  }
+}
