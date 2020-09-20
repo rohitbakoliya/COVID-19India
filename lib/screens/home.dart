@@ -20,6 +20,8 @@ import 'package:intl/intl.dart';
 
 class Home extends StatefulWidget {
   static String pointerValue;
+  static DateTime pointerTime;
+  static int type;
   @override
   _HomeState createState() => _HomeState();
 }
@@ -478,6 +480,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
                         onTap: (index){
                           setState(() {
                             tabIndex = index;
+                            Home.type = index;
                           });
                         },
                         controller: _controller,
@@ -783,7 +786,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
           if (model.hasDatumSelection){
             Home.pointerValue = model.selectedSeries[0]
             .measureFn(model.selectedDatum[0].index)
-            .toString();          
+            .toString();    
+            Home.pointerTime = model.selectedDatum[0].datum.time;      
           }
         })
       ],
@@ -827,9 +831,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
       selectionModels: [
         charts.SelectionModelConfig(changedListener: (charts.SelectionModel model) {
           if (model.hasDatumSelection){
+              // model.selectedDatum.forEach((charts.SeriesDatum datumPair) {
+              //     print('${datumPair.datum.time}: ${datumPair.datum.nums}');
+              // });
             Home.pointerValue = model.selectedSeries[0]
             .measureFn(model.selectedDatum[0].index)
-            .toString();          
+            .toString();
+            Home.pointerTime = model.selectedDatum[0].datum.time;
           }
         })
       ],
@@ -852,18 +860,38 @@ class CustomCircleSymbolRenderer extends charts.CircleSymbolRenderer {
   @override
   void paint(charts.ChartCanvas canvas, Rectangle<num> bounds,{List<int> dashPattern,charts.Color fillColor,charts.FillPatternType fillPattern, charts.Color strokeColor,double strokeWidthPx}) {
     super.paint(canvas, bounds, dashPattern: dashPattern,fillColor: fillColor,fillPattern: fillPattern, strokeColor: strokeColor,strokeWidthPx: strokeWidthPx);
-    canvas.drawRect(
-    Rectangle(bounds.left - 5, bounds.top - 30, bounds.width + 10,
-    bounds.height + 10),
-    fill: charts.Color.white);
+    // canvas.drawRect(
+    //   Rectangle(bounds.left - 5, bounds.top - 30, bounds.width + 10, bounds.height + 10),
+    //   fill: charts.Color.white
+    // );
+    // print(Home.type);
     var textStyle = style.TextStyle();
-    textStyle.color = charts.Color.black;
-    textStyle.fontSize = 12;
+    if(Home.type == 0)
+      textStyle.color = charts.Color.fromHex(code: '#FF8748');
+    else if(Home.type == 1)
+      textStyle.color = charts.Color.fromHex(code: '#36C12C');
+    else
+      textStyle.color = charts.Color.fromHex(code: '#FF4848');
     
+    textStyle.fontSize = 13;
     canvas.drawText(
-    textElement.TextElement(NumberFormat.compact().format(int.parse(Home.pointerValue)), style: textStyle),
-    (bounds.left).round(),
-    (bounds.top - 28).round());
-    
+    textElement.TextElement(
+      'Patients: ' + NumberFormat.compact().format(
+        int.parse(Home.pointerValue)
+      ),
+      style: textStyle
+    ),
+    (0).round(),
+    (-35).round());
+
+    canvas.drawText(
+    textElement.TextElement(
+     'Date: ' + DateFormat.yMMMMd('en_US').format(
+       Home.pointerTime
+      ),
+      style: textStyle
+    ),
+    (0).round(),
+    (-50).round());
   }
 }
