@@ -854,9 +854,8 @@ class TimeSeriesNums {
   TimeSeriesNums(this.time, this.nums);
 }
 
-class CustomCircleSymbolRenderer extends charts.CircleSymbolRenderer {
-
-  
+// read more about this here: https://github.com/google/charts/issues/58
+class CustomCircleSymbolRenderer extends charts.CircleSymbolRenderer {  
   @override
   void paint(charts.ChartCanvas canvas, Rectangle<num> bounds,{List<int> dashPattern,charts.Color fillColor,charts.FillPatternType fillPattern, charts.Color strokeColor,double strokeWidthPx}) {
     super.paint(canvas, bounds, dashPattern: dashPattern,fillColor: fillColor,fillPattern: fillPattern, strokeColor: strokeColor,strokeWidthPx: strokeWidthPx);
@@ -881,7 +880,7 @@ class CustomCircleSymbolRenderer extends charts.CircleSymbolRenderer {
       ),
       style: textStyle
     ),
-    (0).round(),
+    (5).round(),
     (-35).round());
 
     canvas.drawText(
@@ -891,7 +890,7 @@ class CustomCircleSymbolRenderer extends charts.CircleSymbolRenderer {
       ),
       style: textStyle
     ),
-    (0).round(),
+    (5).round(),
     (-50).round());
   }
 }
