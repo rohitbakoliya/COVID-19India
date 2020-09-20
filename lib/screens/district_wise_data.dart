@@ -37,7 +37,6 @@ onSortColumn(int columnIndex,bool ascending, String type){
     }
     else{
       disData.sort((a, b){
-        
         if(type !="district")
           return int.parse(b[type]).compareTo(int.parse(a[type]));
         else
@@ -214,6 +213,9 @@ onSortColumn(int columnIndex,bool ascending, String type){
           'deceased' : "${value['deceased']}"
         };
         disData.add(mp);
+      });
+      disData.sort((a, b){
+         return int.parse(a['confirmed']).compareTo(int.parse(b['confirmed']));
       });
       setState(() {
         rows = getRows();
