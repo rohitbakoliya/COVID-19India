@@ -21,7 +21,7 @@ class _DistrictWiseDataState extends State<DistrictWiseData> {
   int _columnIndex;
   @override
   void initState() {
-    _sort = true;
+    _sort = false;
     _columnIndex = 1;
     super.initState();
     getData();
@@ -215,7 +215,7 @@ onSortColumn(int columnIndex,bool ascending, String type){
         disData.add(mp);
       });
       disData.sort((a, b){
-         return int.parse(a['confirmed']).compareTo(int.parse(b['confirmed']));
+         return int.parse(b['confirmed']).compareTo(int.parse(a['confirmed']));
       });
       setState(() {
         rows = getRows();
