@@ -164,7 +164,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
                         Spacer(),
                         GestureDetector(
                             onTap: (){
-                              Navigator.push(context, SlideLeftRoute(page: DetailedTable(data: this.widget.data)));
+                              if(dataState!=null){
+                                Navigator.push(context, SlideLeftRoute(page: DetailedTable(data: dataState)));
+                              }else{
+                                print('dataState is null');
+                              }
                               // Navigator.push(context, MaterialPageRoute(builder: (context){return DetailedTable(data: data);}),);
                             },
                             child: Container(
