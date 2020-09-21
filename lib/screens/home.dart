@@ -23,7 +23,7 @@ import 'package:intl/intl.dart';
 class Home extends StatefulWidget {
   static String pointerValue;
   static DateTime pointerTime;
-  static int type;
+  static int type = 0;
   @override
   _HomeState createState() => _HomeState();
 }
@@ -31,7 +31,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
   final controller = ScrollController();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  TabController _controller;
+  TabController _tabController;
   Map<String,double> states={};
   bool loading = true;
   double offset = 0;
@@ -53,11 +53,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
     super.initState();
     getData();
     controller.addListener(onScroll);
-    _controller = new TabController(length: 3, vsync: this);
-    _controller.addListener(() {
-      // _controller.animateTo(3, duration: Duration(microseconds: 3));
+    _tabController = new TabController(length: 3, vsync: this);
+    _tabController.addListener(() {
+      // _tabController.animateTo(3, duration: Duration(microseconds: 3));
       setState(() {
-        tabIndex = _controller.index;
+        tabIndex = _tabController.index;
+        Home.type = _tabController.index;
       });
     });  
   }
@@ -66,7 +67,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
   @override
   void dispose() {
     controller.dispose();
-    _controller.dispose();
+    _tabController.dispose();
     super.dispose();
   }
 
@@ -124,9 +125,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
                         onChanged: (value){
                           setState(() {
                             selected=value;
-                            loading = true;
+                            // loading = true;
                           });
-                          getData();
+                          updateToLiveStates();
                         },
                       ),
                     )
@@ -486,7 +487,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
                         //     Home.type = index;
                         //   });
                         // },
-                        controller: _controller,
+                        controller: _tabController,
                         tabs: [
                           Tab(
                             child: Text(
@@ -525,7 +526,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
                     Container(
                       height: 400.0,
                       child: TabBarView(
-                        controller: _controller,
+                        controller: _tabController,
                         children: <Widget>[
                           Column(
                             children: [
@@ -693,42 +694,38 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
 
   Future<void> getData() async{
     try{
-      if(data.isEmpty){
-        Response response = await get("https://api.covid19india.org/data.json");
-        data =jsonDecode(response.body); 
-      }
-      if(list.isEmpty){
-        list = data['cases_time_series'];
-        list = list.reversed.toList();
-      }
+      Response response = await get("https://api.covid19india.org/data.json");
+      data =jsonDecode(response.body); 
+      list = data['cases_time_series'];
+      list = list.reversed.toList();
       lastUpdated = data['statewise'][0]['lastupdatedtime'];
-      if(states.isEmpty){
-        storeAllStatesDataToMap();
-      }
-      updateToLiveStates();
+      
+      data['statewise'].forEach((value){
+        states[value['state']] =double.parse(value['confirmed']) ;
+      });
+      int index = data['statewise'].indexWhere((value)=>value['state']=="Total");
+      setState(() {
+        loading = false;
+        infected =int.parse(data['statewise'][index]["confirmed"]);  
+        deaths =int.parse(data['statewise'][index]["deaths"]);
+        recovered = int.parse(data['statewise'][index]["recovered"]);  
+      });
     }catch(e){
       print('error is ' + e.toString());
     }
-  }
-  void storeAllStatesDataToMap(){
-    data['statewise'].forEach((value){
-      states[value['state']] =double.parse(value['confirmed']) ;
-    });
   }
   void updateToLiveStates(){
     String compareTo = selected;
     if(selected == "India"){
       compareTo = "Total";
     }
-    lastUpdated = Utils().formatDate(lastUpdated);
     int index = data['statewise'].indexWhere((value)=>value['state']==compareTo);
     setState(() {
-      loading = false;
+      // loading = false;
       infected =int.parse(data['statewise'][index]["confirmed"]);  
       deaths =int.parse(data['statewise'][index]["deaths"]);
       recovered = int.parse(data['statewise'][index]["recovered"]);  
     });
-    // print('last updated at : ' + lastUpdated);
   }
 
   //Spread trends
