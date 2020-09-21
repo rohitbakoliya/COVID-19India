@@ -54,18 +54,19 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
     getData();
     controller.addListener(onScroll);
     _controller = new TabController(length: 3, vsync: this);
-    // _controller.addListener(() {
-    //   // _controller.animateTo(3, duration: Duration(microseconds: 3));
-    //   setState(() {
-    //     tabIndex = _controller.index;
-    //   });
-    // });  
+    _controller.addListener(() {
+      // _controller.animateTo(3, duration: Duration(microseconds: 3));
+      setState(() {
+        tabIndex = _controller.index;
+      });
+    });  
   }
   
 
   @override
   void dispose() {
     controller.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -479,12 +480,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
                         ]
                       ),
                       child: TabBar(
-                        onTap: (index){
-                          setState(() {
-                            tabIndex = index;
-                            Home.type = index;
-                          });
-                        },
+                        // onTap: (index){
+                        //   setState(() {
+                        //     tabIndex = index;
+                        //     Home.type = index;
+                        //   });
+                        // },
                         controller: _controller,
                         tabs: [
                           Tab(
@@ -558,7 +559,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
                               ),
                               Container(
                                 // margin: EdgeInsets.only(top : 20),
-                                padding: EdgeInsets.only(top: 10 , bottom:  20, left: 10),
+                                padding: EdgeInsets.only(top: 10 , bottom:  20, left: 10, right: 3),
                                 height: 300,
                                 width: double.infinity,
                                 decoration: BoxDecoration(
@@ -609,7 +610,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
                               ],
                             ),
                             Container(
-                              padding: EdgeInsets.only(top: 10 , bottom:  20, left: 10),
+                              padding: EdgeInsets.only(top: 10 , bottom:  20, left: 10, right: 3),
                               height: 300,
                               width: double.infinity,
                               decoration: BoxDecoration(
@@ -658,7 +659,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
                                 ],
                               ),
                               Container(
-                                padding: EdgeInsets.only(top: 10 , bottom:  20, left: 10),
+                                padding: EdgeInsets.only(top: 10 , bottom:  20, left: 10, right: 3),
                                 height: 300,
                                 width: double.infinity,
                                 decoration: BoxDecoration(
@@ -754,7 +755,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
   Widget createChart(String type){
     List<charts.Series<TimeSeriesNums , DateTime >> seriesList = [];
     List<TimeSeriesNums> seriesData = [];
-    for(int i=0; i< min(list.length, 60); i++){
+    for(int i=0; i< min(list.length, 120); i++){
       seriesData.add(TimeSeriesNums(Utils().reformatDate(list[i]['date']), int.parse(list[i][type])));
     }
     seriesList.add(createSeries(type, seriesData, type));
@@ -768,7 +769,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
       
       domainAxis: new charts.DateTimeAxisSpec(
         tickProviderSpec: new charts.DayTickProviderSpec(
-          increments: [12] // that is 12*5 = 60 days means 5 ticks are there 
+          increments: [24] // that is 24*5 = 120 days means 5 ticks are there 
         ),
         tickFormatterSpec: new charts.AutoDateTimeTickFormatterSpec(
           day: new charts.TimeFormatterSpec(
@@ -803,7 +804,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
   Widget createBarChart(String type){
     List<charts.Series<TimeSeriesNums , DateTime >> seriesList = [];
     List<TimeSeriesNums> seriesData = [];
-    for(int i=0; i< min(list.length, 60); i++){
+    for(int i=0; i< min(list.length, 120); i++){
       seriesData.add(TimeSeriesNums(Utils().reformatDate(list[i]['date']), int.parse(list[i][type])));
     }
     seriesList.add(createSeries(type, seriesData , type));
@@ -816,7 +817,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
       ),
       domainAxis: new charts.DateTimeAxisSpec(
         tickProviderSpec: new charts.DayTickProviderSpec(
-          increments: [12] // that is 12*5 = 60 days means 5 ticks are there 
+          increments: [24] // that is 24*5 = 120 days means 5 ticks are there 
         ),
         tickFormatterSpec: new charts.AutoDateTimeTickFormatterSpec(
           day: new charts.TimeFormatterSpec(
