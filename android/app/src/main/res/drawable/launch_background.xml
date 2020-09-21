@@ -3,10 +3,18 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:drawable="@android:color/white" />
 
-    <!-- You can insert your own image assets here -->
-    <!-- <item>
+    <!-- You can insert your own image assets here 
+        @mipmap/lauch_image and use signle image with text
+    -->
+    <item android:bottom="150dp">
         <bitmap
             android:gravity="center"
-            android:src="@mipmap/launch_image" />
-    </item> -->
+            android:src="@drawable/launch_image" />
+        
+    </item>
+    <item android:top="210dp">
+        <bitmap
+            android:gravity="center"
+            android:src="@drawable/launch_text"/>
+    </item>
 </layer-list>
