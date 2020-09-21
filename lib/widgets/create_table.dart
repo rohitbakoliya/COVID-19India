@@ -1,5 +1,6 @@
 import 'package:covid_19/constant.dart';
 import 'package:covid_19/screens/district_wise_data.dart';
+import 'package:covid_19/widgets/route_custom_transition.dart';
 import 'package:flutter/material.dart';
 
 class CreateTable extends StatefulWidget {
@@ -43,7 +44,8 @@ class _CreateTableState extends State<CreateTable> {
               ),
               onTap: (){
                 if(value['state']!="Total"){
-                  Navigator.push(context , MaterialPageRoute(builder: (context){return DistrictWiseData(state : value['state']);}));
+                  // Navigator.push(context , MaterialPageRoute(builder: (context){return DistrictWiseData(state : value['state']);}));
+                  Navigator.push(context , SlideLeftRoute(page: DistrictWiseData(state : value['state'])));
                 }
               }
             ),

@@ -1,20 +1,22 @@
-import 'dart:math';
+import 'package:flutter/material.dart';
 
 import 'package:covid_19/widgets/app_drawer.dart';
 import 'package:covid_19/widgets/dots.dart';
-import 'package:flutter/material.dart';
+import 'package:covid_19/widgets/route_custom_transition.dart';
+import 'package:covid_19/screens/detailed_table.dart';
+import 'package:covid_19/widgets/counter.dart';
+import 'package:covid_19/widgets/myheader.dart';
+import 'package:covid_19/constant.dart';
+import 'package:covid_19/utils/utils.dart';
+
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:charts_flutter/src/text_style.dart' as style;
 import 'package:charts_flutter/src/text_element.dart' as textElement;
 
+import 'dart:math';
 import 'package:http/http.dart';
 import 'dart:convert';
-import 'package:covid_19/widgets/counter.dart';
-import 'package:covid_19/widgets/myheader.dart';
-import 'package:covid_19/constant.dart';
-import 'package:covid_19/screens/detailed_table.dart';
-import 'package:covid_19/utils/utils.dart';
 import 'package:intl/intl.dart';
 
 
@@ -156,11 +158,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
                         Spacer(),
                         GestureDetector(
                             onTap: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context){return DetailedTable(data: data);}),);
+                              Navigator.push(context, SlideLeftRoute(page: DetailedTable(data: data)));
+                              // Navigator.push(context, MaterialPageRoute(builder: (context){return DetailedTable(data: data);}),);
                             },
                             child: Container(
                               padding: EdgeInsets.all(8),
-                              decoration: BoxDecoration(color: Colors.brown),
                               child: Text(
                               "See Details",
                               style: TextStyle(
