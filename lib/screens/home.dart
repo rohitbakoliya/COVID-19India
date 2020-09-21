@@ -8,6 +8,7 @@ import 'package:covid_19/widgets/counter.dart';
 import 'package:covid_19/widgets/myheader.dart';
 import 'package:covid_19/constant.dart';
 import 'package:covid_19/utils/utils.dart';
+import 'package:covid_19/utils/init_get_it.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -15,8 +16,6 @@ import 'package:charts_flutter/src/text_style.dart' as style;
 import 'package:charts_flutter/src/text_element.dart' as textElement;
 
 import 'dart:math';
-import 'package:http/http.dart';
-import 'dart:convert';
 import 'package:intl/intl.dart';
 
 
@@ -24,6 +23,10 @@ class Home extends StatefulWidget {
   static String pointerValue;
   static DateTime pointerTime;
   static int type = 0;
+
+  final Map data;
+
+  const Home({Key key,this.data}) : super(key: key);
   @override
   _HomeState createState() => _HomeState();
 }
@@ -32,17 +35,19 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
   final controller = ScrollController();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   TabController _tabController;
-  Map<String,double> states={};
   bool loading = true;
   double offset = 0;
   String selected="India";
+  double constant = 300;
+  
+  Map dataState = {};
+  Map<String,double> states={};
   int infected = -1;
   int deaths = -1;
   int recovered = -1;
-  double constant = 300;
   List<dynamic> list = [];
-  Map data = {};
-  String lastUpdated="";
+  String lastUpdated = "";
+  
   bool infectedSwitchControl = false;
   bool recoveredSwitchControl = false;
   bool deathsSwitchControl = false;
@@ -51,18 +56,17 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
   @override
   void initState() {
     super.initState();
-    getData();
+    checkService();
+    // fillData();
     controller.addListener(onScroll);
     _tabController = new TabController(length: 3, vsync: this);
     _tabController.addListener(() {
-      // _tabController.animateTo(3, duration: Duration(microseconds: 3));
       setState(() {
         tabIndex = _tabController.index;
         Home.type = _tabController.index;
       });
     });  
   }
-  
 
   @override
   void dispose() {
@@ -160,7 +164,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
                         Spacer(),
                         GestureDetector(
                             onTap: (){
-                              Navigator.push(context, SlideLeftRoute(page: DetailedTable(data: data)));
+                              Navigator.push(context, SlideLeftRoute(page: DetailedTable(data: this.widget.data)));
                               // Navigator.push(context, MaterialPageRoute(builder: (context){return DetailedTable(data: data);}),);
                             },
                             child: Container(
@@ -691,43 +695,45 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
       ),
     );
   }
-
-  Future<void> getData() async{
-    try{
-      Response response = await get("https://api.covid19india.org/data.json");
-      data =jsonDecode(response.body); 
-      list = data['cases_time_series'];
+  void fillData(){
+      list = dataState['cases_time_series'];
       list = list.reversed.toList();
-      lastUpdated = data['statewise'][0]['lastupdatedtime'];
+      lastUpdated = dataState['statewise'][0]['lastupdatedtime'];
       
-      data['statewise'].forEach((value){
+      dataState['statewise'].forEach((value){
         states[value['state']] =double.parse(value['confirmed']) ;
       });
-      int index = data['statewise'].indexWhere((value)=>value['state']=="Total");
+      int index = dataState['statewise'].indexWhere((value)=>value['state']=="Total");
       setState(() {
         loading = false;
-        infected =int.parse(data['statewise'][index]["confirmed"]);  
-        deaths =int.parse(data['statewise'][index]["deaths"]);
-        recovered = int.parse(data['statewise'][index]["recovered"]);  
+        infected =int.parse(dataState['statewise'][index]["confirmed"]);  
+        deaths =int.parse(dataState['statewise'][index]["deaths"]);
+        recovered = int.parse(dataState['statewise'][index]["recovered"]);  
       });
-    }catch(e){
-      print('error is ' + e.toString());
-    }
   }
   void updateToLiveStates(){
     String compareTo = selected;
     if(selected == "India"){
       compareTo = "Total";
     }
-    int index = data['statewise'].indexWhere((value)=>value['state']==compareTo);
+    int index = dataState['statewise'].indexWhere((value)=>value['state']==compareTo);
     setState(() {
-      // loading = false;
-      infected =int.parse(data['statewise'][index]["confirmed"]);  
-      deaths =int.parse(data['statewise'][index]["deaths"]);
-      recovered = int.parse(data['statewise'][index]["recovered"]);  
+      loading = false;
+      infected =int.parse(dataState['statewise'][index]["confirmed"]);  
+      deaths =int.parse(dataState['statewise'][index]["deaths"]);
+      recovered = int.parse(dataState['statewise'][index]["recovered"]);  
     });
   }
-
+  void checkService(){
+    if(this.widget.data == null){
+      Home _home = getIt<Home>();
+      dataState = _home.data;
+    }else{
+      getIt.registerLazySingleton(() => Home(data: this.widget.data));
+      dataState = this.widget.data;
+    }
+    fillData();
+  }
   //Spread trends
 
   /*
