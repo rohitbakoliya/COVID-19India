@@ -51,7 +51,7 @@ class _TransmissionOfCovidState extends State<TransmissionOfCovid> {
                                 },
                                 child: Container(
                                   padding: EdgeInsets.symmetric(horizontal : 20, vertical: 10),
-                                  decoration: BoxDecoration(color: Colors.brown),
+                                  // decoration: BoxDecoration(color: Colors.brown),
                                   child: SvgPicture.asset("assets/icons/menu.svg")
                                 )
                               ),

@@ -45,7 +45,7 @@ class _IndiaHelplinesState extends State<IndiaHelplines> {
                                   Scaffold.of(context).openEndDrawer();
                                 },
                                 child: Container(
-                                  decoration: BoxDecoration(color: Colors.brown),
+                                  // decoration: BoxDecoration(color: Colors.brown),
                                   padding: EdgeInsets.symmetric(horizontal : 20, vertical: 10),
                                   child: SvgPicture.asset("assets/icons/menu.svg")
                                 )

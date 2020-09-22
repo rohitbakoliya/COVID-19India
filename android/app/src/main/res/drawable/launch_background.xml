@@ -12,9 +12,9 @@
             android:src="@drawable/launch_image" />
         
     </item>
-    <item android:top="210dp">
+    <!-- <item android:top="210dp">
         <bitmap
             android:gravity="center"
             android:src="@drawable/launch_text"/>
-    </item>
+    </item> -->
 </layer-list>
