@@ -18,6 +18,8 @@ class HomeViewModel {
   Future<Null> onAppStart() async{
     await service.getData().then((value){
       setData(value);
+    }).catchError((e){
+      throw "Error in home_view_model";
     });
   }
 }

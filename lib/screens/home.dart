@@ -32,7 +32,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
-  final controller = ScrollController();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   TabController _tabController;
   bool loading = true;
@@ -57,8 +56,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
   void initState() {
     super.initState();
     checkService();
-    // fillData();
-    controller.addListener(onScroll);
     _tabController = new TabController(length: 3, vsync: this);
     _tabController.addListener(() {
       setState(() {
@@ -70,16 +67,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
 
   @override
   void dispose() {
-    controller.dispose();
     _tabController.dispose();
     super.dispose();
   }
 
-  void onScroll() {
-    setState(() {
-      offset = (controller.hasClients) ? controller.offset : 0;
-    });
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,7 +78,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
       endDrawer: AppDrawer(),
       body: Builder(
             builder: (context)=>SingleChildScrollView(
-            controller: controller,
             child: Column(
             children: <Widget>[
               MyHeader(
