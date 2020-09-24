@@ -87,7 +87,7 @@ class _DevelopersPageState extends State<DevelopersPage> {
                   )
                 ),
                 onTap: (){
-                  //Launch Review
+                  _launchURL('https://play.google.com/store/apps/details?id=com.rohitbakoliya.COVID_19India');
                 },
               ),
               ListTile(
@@ -102,7 +102,7 @@ class _DevelopersPageState extends State<DevelopersPage> {
                 onTap: (){
                   final RenderBox box = context.findRenderObject();
                   Share.share(
-                    'Stay Updated with COVID19!\nI recommend __THISAPP__ to fight against COVID-19. Please download and share it using this link:\nhttps://play.google.com/store/apps/details?id=com.rohitbakoliya.covid_19'
+                    'Stay Updated with COVID-19!\nI recommend COVID-19 India App to fight against COVID-19. Please download and share it using this link:\nhttps://play.google.com/store/apps/details?id=com.rohitbakoliya.COVID_19India'
                   , subject: '#IndiaFightsCORONA',
                   sharePositionOrigin:
                   box.localToGlobal(Offset.zero) &
@@ -120,7 +120,7 @@ class _DevelopersPageState extends State<DevelopersPage> {
                 ),
                 onTap: (){
                   //Contact Us
-                  _launchURL('mailto:contact@rohitbakoliya.com');
+                  _launchURL('mailto:rohitbakoliya0472@gmail.com');
                 },
               ),
               ListTile(
@@ -134,7 +134,7 @@ class _DevelopersPageState extends State<DevelopersPage> {
                 ),
                 onTap: (){
                   //Report a bug
-                  _launchURL('mailto:contact@rohitbakoliya.com?subject=For%20Reporting%20a%20Bug&body=<strong>NOTE:%20Please%20do%20not%20change%20the%20initial%20subject%20in%20order%20to%20find%20out%20it%20is%20a%20bug%20reporting%20email.<strong/><br>');
+                  _launchURL('mailto:rohitbakoliya0472@gmail.com?subject=For%20Reporting%20a%20Bug%20|%20<BUG_REPORT>&body=NOTE:%20Please%20do%20not%20change%20the%20initial%20subject%20in%20order%20to%20identify%20it%20is%20a%20bug%20reporting%20email.<br>');
                 },
               ),
               ListTile(
