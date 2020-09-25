@@ -2,6 +2,7 @@ import 'package:covid_19/screens/home.dart';
 import 'package:covid_19/service/service.dart';
 import 'package:covid_19/utils/init_get_it.dart';
 import 'package:covid_19/viewmodel/home_view_model.dart';
+import 'package:covid_19/widgets/route_custom_transition.dart';
 import 'package:covid_19/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:covid_19/constant.dart';
@@ -66,7 +67,7 @@ class _MyAppErrorState extends State<MyAppError> {
           body: _loading ? _circularProgressIndicator(): Builder(
                 builder:(context)=> SafeArea(
                 child: Container(
-                  margin: EdgeInsets.all(10),
+                  margin: EdgeInsets.all(20),
                   child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -78,7 +79,7 @@ class _MyAppErrorState extends State<MyAppError> {
                     ),
                     SizedBox(height: 5),
                     Text(
-                      "No internet found. Check your connection",
+                      "No internet found. Check your connection and try again.",
                       textAlign: TextAlign.center,
                     ),
 
@@ -148,8 +149,7 @@ class _MyAppErrorState extends State<MyAppError> {
     });
     HomeViewModel homeViewModel = HomeViewModel();
     homeViewModel.onAppStart().then((_){
-      print('init');
-      Navigator.pushReplacement(_scaffoldKey.currentContext, MaterialPageRoute(builder: (context)=> Home(data : homeViewModel.data)));
+      Navigator.pushReplacement(_scaffoldKey.currentContext, ScaleRoute(page: Home(data : homeViewModel.data)));
     }).catchError((e){
       setState(() {
         _loading = false;
