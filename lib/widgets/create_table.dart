@@ -2,6 +2,7 @@ import 'package:covid_19/constant.dart';
 import 'package:covid_19/screens/district_wise_data.dart';
 import 'package:covid_19/widgets/route_custom_transition.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class CreateTable extends StatefulWidget {
   final List<dynamic> data;
@@ -37,7 +38,7 @@ class _CreateTableState extends State<CreateTable> {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color: Color(0xFF4B4B4B),
-                    fontWeight: value['state'] == "Total" ? FontWeight.bold : FontWeight.normal,
+                    fontWeight: value['state'] == "Total" ? FontWeight.w600 : FontWeight.normal,
                     fontFamily: "Poppins"
                   ),
                 ),
@@ -54,7 +55,7 @@ class _CreateTableState extends State<CreateTable> {
                 value['confirmed'],
                 style: TextStyle(
                   color: kInfectedColor,
-                  fontWeight: value['state'] == "Total" ? FontWeight.bold : FontWeight.normal,
+                  fontWeight: value['state'] == "Total" ? FontWeight.w600 : FontWeight.normal,
                   fontFamily: "Poppins",
                 ),
               )
@@ -64,7 +65,7 @@ class _CreateTableState extends State<CreateTable> {
                 value['recovered'],
                 style: TextStyle(
                   color: kRecovercolor,
-                  fontWeight: value['state'] == "Total" ? FontWeight.bold : FontWeight.normal,
+                  fontWeight: value['state'] == "Total" ? FontWeight.w600 : FontWeight.normal,
                   fontFamily: "Poppins"
                 ),
               ),
@@ -74,11 +75,23 @@ class _CreateTableState extends State<CreateTable> {
                 value['deaths'],
                 style: TextStyle(
                   color: kDeathColor,
-                  fontWeight: value['state'] == "Total" ? FontWeight.bold : FontWeight.normal,
+                  fontWeight: value['state'] == "Total" ? FontWeight.w600 : FontWeight.normal,
                   fontFamily: "Poppins"
                 ),
               ),
             ),
+            DataCell(
+              
+              value['state'] == "Total" ? Container():
+              Container(
+                alignment: Alignment.center,
+                child: SvgPicture.asset("assets/icons/forward.svg"),
+              ),
+              onTap: (){
+                if(value['state'] !="Total")
+                Navigator.push(context , SlideLeftRoute(page: DistrictWiseData(state : value['state'])));
+              }
+            )
           ],
         )
       );
@@ -148,7 +161,7 @@ class _CreateTableState extends State<CreateTable> {
             'Infected',
             style: TextStyle(
               color: kInfectedColor,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.bold,
               fontFamily: "Poppins"
             ),
           ),
@@ -167,7 +180,7 @@ class _CreateTableState extends State<CreateTable> {
             style: TextStyle(
               color: kRecovercolor,
               fontFamily: "Poppins",
-              fontWeight: FontWeight.w600
+              fontWeight: FontWeight.bold
             ),
           ),
           numeric: true,
@@ -185,7 +198,7 @@ class _CreateTableState extends State<CreateTable> {
             style: TextStyle(
               color: kDeathColor,
               fontFamily: "Poppins",
-              fontWeight: FontWeight.w600
+              fontWeight: FontWeight.bold
             ),
           ),
           numeric: true,
@@ -196,67 +209,19 @@ class _CreateTableState extends State<CreateTable> {
               });
               onSortColumn(columnIndex, ascending, "deaths");
           },
+        ),
+        DataColumn(
+          label: Text(
+            'See more',
+            style: TextStyle(
+              color: Color(0xFF4B4B4B),
+              fontFamily: "Poppins",
+              fontWeight: FontWeight.bold
+            ),
+          ),
         )
       ],
       rows: rows,
       );
   }
 }
-
-
-//   rows: this.widget.data.map<DataRow>((value){
-      //     return new DataRow(
-      //       cells: [
-      //         DataCell(
-      //           Container(
-      //             width: 90,
-      //             child: Text(
-      //               value['state'],
-      //               maxLines: 2,
-      //               overflow: TextOverflow.ellipsis,
-      //               style: TextStyle(
-      //                 color: Color(0xFF4B4B4B),
-      //                 fontWeight: value['state'] == "Total" ? FontWeight.bold : FontWeight.normal,
-      //                 fontFamily: "Poppins"
-      //               ),
-      //             ),
-      //           ),
-      //           onTap: (){
-      //             if(value['state']!="Total"){
-      //               Navigator.push(context , MaterialPageRoute(builder: (context){return DistrictWiseData(state : value['state']);}));
-      //             }
-      //           }
-      //         ),
-      //         DataCell(
-      //         Text(
-      //             value['confirmed'],
-      //             style: TextStyle(
-      //               color: kInfectedColor,
-      //               fontWeight: value['state'] == "Total" ? FontWeight.bold : FontWeight.normal,
-      //               fontFamily: "Poppins",
-      //             ),
-      //           )
-      //         ),
-      //         DataCell(
-      //           Text(
-      //             value['recovered'],
-      //             style: TextStyle(
-      //               color: kRecovercolor,
-      //               fontWeight: value['state'] == "Total" ? FontWeight.bold : FontWeight.normal,
-      //               fontFamily: "Poppins"
-      //             ),
-      //           ),
-      //         ),
-      //         DataCell(
-      //           Text(
-      //             value['deaths'],
-      //             style: TextStyle(
-      //               color: kDeathColor,
-      //               fontWeight: value['state'] == "Total" ? FontWeight.bold : FontWeight.normal,
-      //               fontFamily: "Poppins"
-      //             ),
-      //           ),
-      //         ),
-      //       ],
-      //     );}
-      //   ).toList(),
