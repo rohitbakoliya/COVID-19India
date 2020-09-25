@@ -41,3 +41,4 @@ app.*.symbols
 
 # other
 /todos.txt
+/android/key.properties
