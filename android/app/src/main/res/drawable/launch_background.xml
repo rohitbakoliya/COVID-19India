@@ -4,12 +4,14 @@
     <item android:drawable="@android:color/white" />
 
     <!-- You can insert your own image assets here 
-        @mipmap/lauch_image and use signle image with text
+            android:gravity="center"
     -->
-    <item android:bottom="150dp">
+    <item android:width="200dp"
+        android:height="300dp"
+        android:gravity="center"
+        >
         <bitmap
             android:gravity="center"
             android:src="@drawable/launch_image" />
-        
     </item>
 </layer-list>
