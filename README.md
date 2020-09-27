@@ -13,6 +13,7 @@ Flutter application for analyzing real-time COVID-19 updates in India with the h
 
 ```
 $ git clone https://github.com/rohitbakoliya/covid-19INDIA.git
+$ cd covid-19INDIA
 $ flutter pub get
 ```
 
