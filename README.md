@@ -2,6 +2,8 @@
 
 Flutter application for analyzing real-time COVID-19 updates in India with the help of a dashboard for total infected, recovered, and deaths in different states/zones in India. Also, graphs to see the past 3 months trend and daily changes. It informs the users of the app regarding risks, best practices, relevant advisories pertaining to the containment of COVID-19 and different helpline numbers in India. It makes sure that the countrymen remain healthy at all cost with trusted up to date information from reliable sources of India.
 
+<a href="app-release.apk" download="COVID-19 INDIA" > Download Apk </a>
+
 ### Prerequisites
 
 - Any Operating System (ie. MacOS X, Linux, Windows)
