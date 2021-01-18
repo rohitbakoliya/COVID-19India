@@ -753,7 +753,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
     List<charts.Series<TimeSeriesNums , DateTime >> seriesList = [];
     List<TimeSeriesNums> seriesData = [];
     for(int i=0; i< min(list.length, 120); i++){
-      seriesData.add(TimeSeriesNums(Utils().reformatDate(list[i]['date']), int.parse(list[i][type])));
+      seriesData.add(TimeSeriesNums(Utils().reformatDate(list[i]['dateymd']), int.parse(list[i][type])));
     }
     seriesList.add(createSeries(type, seriesData, type));
     return charts.TimeSeriesChart(
@@ -802,7 +802,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
     List<charts.Series<TimeSeriesNums , DateTime >> seriesList = [];
     List<TimeSeriesNums> seriesData = [];
     for(int i=0; i< min(list.length, 120); i++){
-      seriesData.add(TimeSeriesNums(Utils().reformatDate(list[i]['date']), int.parse(list[i][type])));
+      seriesData.add(TimeSeriesNums(Utils().reformatDate(list[i]['dateymd']), int.parse(list[i][type])));
     }
     seriesList.add(createSeries(type, seriesData , type));
     return new charts.TimeSeriesChart(

@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
       ),
       home: Provider(
         create: (context) => homeViewModel,
-        builder: (context)=> homeViewModel,
+          // builder: (context)=> homeViewModel,
         child: Wrapper(),
       ) 
     );
