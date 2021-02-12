@@ -2,6 +2,14 @@
 
 COVID-19 INDIA, an application made with an attempt to connect the countrymen of India and providing information to all the Indians regarding the deadly novel coronavirus. This app basically aims at providing information regarding the number of cases of affected people with the coronavirus, the number of casualties and the number of people recovered from the virus in their locality, city and their country. It informs the users of the app regarding risks, best practices, relevant advisories pertaining to the containment of COVID-19 and different helpline numbers in India. It makes sure that the countrymen remain healthy at all cost with trusted up to date information from reliable sources of the government of India.
 
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=T0BjchqcleE">View Demo</a>
+  •
+  <a href="https://github.com/rohitbakoliya/COVID-19India/issues">Report Bug</a>
+  •
+  <a href="https://github.com/rohitbakoliya/covid-19INDIA/raw/master/Covid19-INDIA.apk" download="COVID-19 INDIA.apk" > Download Apk</a>
+</p>
+
 ### Download Apk
 
 <a href="https://github.com/rohitbakoliya/covid-19INDIA/raw/master/Covid19-INDIA.apk" download="COVID-19 INDIA.apk" > 
